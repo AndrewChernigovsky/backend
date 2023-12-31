@@ -1,0 +1,1 @@
+*,::after,::before{box-sizing:border-box}.container{max-width:1440px;padding:0 10px;margin:0 auto}.title{display:flex;gap:10px}.btn-remove,.title h2+.input-text{display:none}.title h2.active+.input-text,.title h2.active~.btn-remove{display:block}
