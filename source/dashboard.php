@@ -18,26 +18,33 @@ $stmt->execute();
 
 <body>
 	<div class="container">
+		<div class="wrapper">
+			<!-- ./data/process.php -->
+			<form action="" method="POST" class="form">
+				<div class="titles">
+					<?php
+					require_once('components/Title.php');
 
-		<form action="./data/process.php" method="POST">
-			<?php
-			require_once('components/Title.php');
+					while ($post = $stmt->fetch(PDO::FETCH_ASSOC)) {
+						$item = new Title($post['title'], $post['id'], false);
+						$a = $item->getTitle();
+						echo "<div class='title'>$a</div>";
+					}
+					?>
+				</div>
+				<hr>
+				<label class="form__label">
+					<span>Добавить Заголовок</span>
+					<input type="text" name="title">
+				</label>
+				<input type="submit" name='submit' class='form__submit'>
+			</form>
+			<a href="index.php" class="link">Main Page</a>
+		</div>
 
-			while ($post = $stmt->fetch(PDO::FETCH_ASSOC)) {
-				$item = new Title($post['title'], $post['id'], false);
-				$a = $item->getTitle();
-				echo "<div class='title'>$a</div>";
-			}
-			?>
-			<label>
-				<input type="text" name="title">
-				<span>Заголовок</span>
-			</label>
-			<input type="submit" name='submit'>Publish</input>
-		</form>
 	</div>
 
-	<a href="index.php">Main Page</a>
+
 	<script src="./js/dashboard.js" type="module"></script>
 </body>
 

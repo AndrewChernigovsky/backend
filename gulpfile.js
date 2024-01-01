@@ -50,7 +50,7 @@ export function removeBuild(done) {
 
 export function startServer() {
 	server.init(config.a.browserSyncOpts)
-	watch('./source/sass/**/*.scss', series(processStyles));
+	watch('./source/sass/**/**/*.scss', series(processStyles, reloadServer));
 	watch('./source/**/*.php', series(copyPHP, reloadServer));
 	watch('./source/**/*.js', series(copyJS, reloadServer));
 };
