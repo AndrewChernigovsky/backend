@@ -84,9 +84,9 @@
 		}
 
 		input[type="checkbox"] {
-			opacity: 0;
-			position: absolute;
-			z-index: -1;
+			// opacity: 0;
+			// position: absolute;
+			// z-index: -1;
 		}
 		input[type="checkbox"]:checked ~ .btn-remove {
 			background-color: rgb(255, 255, 255);

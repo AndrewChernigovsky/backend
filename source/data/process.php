@@ -3,19 +3,40 @@ if (isset($_POST['submit'])) {
 	require_once('connect.php');
 	$stmt = $conn->prepare("SELECT * FROM titles ORDER BY id DESC");
 	$stmt->execute();
-	$post = $stmt->fetch(PDO::FETCH_ASSOC);
+	$post = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 	$title_id = $post['id'];
 	$title = $_POST['title'];
-	$newtitle = $_POST['newtitle'];
+	$newtitles = $_POST['newtitle'];
+	$remove = $_POST['remove'];
 
+	if (is_array($newtitles)) {
 
-	$a = (string) $title_id;
-	$checked = $_POST[$a];
+		for ($i = 0; $i < count($newtitles); $i++) {
+			if (isset($newtitles[$i])) {
+				$title_id = $post[$i]['id'];
+				$stmt = $conn->prepare("UPDATE titles SET title = :title WHERE id = :title_id");
+				$stmt->bindParam(':title', $newtitles[$i], PDO::PARAM_INT);
+				$stmt->bindParam(':title_id', $title_id, PDO::PARAM_INT);
+				$stmt->execute();
+				echo $title_id;
+			}
+		}
+	}
 
-	echo $title_id;
-	echo $checked;
-	echo $newtitle;
+	if (is_array($newtitles)) {
+
+		for ($i = 0; $i < count($newtitles); $i++) {
+
+			if (isset($newtitles[$i]) && $remove[$i] == 'on') {
+				$title_id = $post[$i]['id'];
+				$stmt = $conn->prepare("DELETE FROM titles WHERE id=:title_id");
+				$stmt->bindParam(':title_id', $title_id, PDO::PARAM_INT);
+				$stmt->execute();
+			}
+
+		}
+	}
 
 	if (!empty($title)) {
 		$stmt = $conn->prepare("INSERT INTO titles(title) VALUE(:title)");
@@ -24,15 +45,10 @@ if (isset($_POST['submit'])) {
 	}
 
 
-	if (isset($newtitle) && $checked == 'on') {
-		$stmt = $conn->prepare("DELETE FROM titles WHERE id=$a");
-		$stmt->execute();
-		echo '123123';
-
-	}
 
 
-	header('refresh: 1, url=./../dashboard.php');
+
+	header('refresh: 3, url=./../dashboard.php');
 } else {
 	header('Location: dashboard.php?invalidRequest');
 	exit();

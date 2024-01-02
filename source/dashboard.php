@@ -20,13 +20,14 @@ $stmt->execute();
 	<div class="container">
 		<div class="wrapper">
 			<!-- ./data/process.php -->
-			<form action="" method="POST" class="form">
+			<form action="./data/process.php" method="POST" class="form">
 				<div class="titles">
 					<?php
 					require_once('components/Title.php');
 
 					while ($post = $stmt->fetch(PDO::FETCH_ASSOC)) {
 						$item = new Title($post['title'], $post['id'], false);
+						echo $post['id'];
 						$a = $item->getTitle();
 						echo "<div class='title'>$a</div>";
 					}

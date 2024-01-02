@@ -24,10 +24,12 @@
 			return "<h2>$title</h2>";
 		} else {
 			return "
-				<input type='text' class='input-text' name='newtitle' value='$title'>
+				<input type='text' class='input-text' name='newtitle[]' value='$title'>
 				<div class='wrapper-btns'>
-					<button type='button' class='btn-edit'>Edit</button>
-					<span class='btn-remove' data-name='newtitle_$id' data-checked='false'>Remove</span>
+					<label for='Remove$id'>
+						Remove
+					</label>
+					<input type='checkbox' id='Remove$id' name='remove[]'>
 				</div>
 			";
 		}
@@ -37,6 +39,6 @@
 }
 
 ?>
-
+<!-- <button type='button' class='btn-edit'>Edit</button> -->
 <!-- <input type='checkbox' id='btnRemove_$id' name='$id' checked=''>
 <label class='btn-remove' for='btnRemove_$id'>Remove</label> -->
