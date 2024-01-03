@@ -13,7 +13,7 @@ require_once('data/connect.php');
 // $title = $_POST['title'];
 $stmt = $conn->prepare("SELECT * FROM titles ORDER BY id DESC");
 $stmt->execute();
-
+$conn = null;
 ?>
 
 <body>

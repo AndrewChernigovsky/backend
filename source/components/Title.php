@@ -1,6 +1,5 @@
 <?php class Title
 {
-	private $conn;
 	public $title;
 	public $main;
 	public $id;
@@ -11,11 +10,6 @@
 		$this->id = $id;
 	}
 
-	// public function deleteTitle()
-	// {
-	// 	$this->title = '0000';
-	// }
-
 	public function getTitle()
 	{
 		$title = $this->title;
@@ -24,12 +18,11 @@
 			return "<h2>$title</h2>";
 		} else {
 			return "
-				<input type='text' class='input-text' name='newtitle[]' value='$title'>
+				<input type='text' class='input-text' id='newtitle_$id' name='newtitles[]' value='$title'>
 				<div class='wrapper-btns'>
-					<label for='Remove$id'>
+					<a href='./data/process.php?id=$id'>
 						Remove
-					</label>
-					<input type='checkbox' id='Remove$id' name='remove[]'>
+					</a>
 				</div>
 			";
 		}
@@ -39,6 +32,3 @@
 }
 
 ?>
-<!-- <button type='button' class='btn-edit'>Edit</button> -->
-<!-- <input type='checkbox' id='btnRemove_$id' name='$id' checked=''>
-<label class='btn-remove' for='btnRemove_$id'>Remove</label> -->

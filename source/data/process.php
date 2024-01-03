@@ -1,68 +1,66 @@
 <?php
+require_once('connect.php');
+require_once('./../components/CreateDeleteUpdate.php');
+$removeID = $_GET['id'];
+
+if (isset($removeID)) {
+
+	// $stmt2 = $conn->prepare("DELETE FROM titles WHERE id = :title_id");
+	// $stmt2->bindParam(':title_id', $removeID, PDO::PARAM_INT);
+	// $stmt2->execute();
+	$titleNew = new CreateDeleteUpdate($stmt, $conn, $table = 'titles', $nameRow = 'title', $id = $removeID);
+	$titleNew->delete();
+	header("Location: ./../dashboard.php");
+}
+
 if (isset($_POST['submit'])) {
-	require_once('connect.php');
 	$stmt = $conn->prepare("SELECT * FROM titles ORDER BY id DESC");
 	$stmt->execute();
 	$post = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-	$oldtitles = $post['title'];
+	$stmt1 = $conn->prepare("SELECT title FROM titles");
+	$stmt1->execute();
+	$post1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
+	$oldtitles = $post1;
 	$title_id = $post['id'];
 	$title = $_POST['title'];
 
-	$newtitles = $_POST['newtitle'];
-	$remove = $_POST['remove'];
+	$newtitles = $_POST['newtitles'];
 
-	echo $oldtitles;
+	if (empty($title)) {
 
-	if (is_array($newtitles)) {
-		$totalCount = count($newtitles);
 
-		for ($i = 0; $i < $totalCount; $i++) {
-			if (isset($newtitles[$i]) && isset($oldtitles[$i])) {
-				// Сравниваем новые и старые значения
-				echo $oldtitles[$i];
-				if ($newtitles[$i] !== $oldtitles[$i]) {
-					$title_id = $post[$i]['id'];
-					// $stmt = $conn->prepare("UPDATE titles SET title = :title WHERE id = :title_id");
-					// $stmt->bindParam(':title', $newtitles[$i], PDO::PARAM_STR);
-					// $stmt->bindParam(':title_id', $title_id, PDO::PARAM_INT);
+		if (is_array($newtitles)) {
+			$totalCount = count($newtitles);
 
-					// if (!$stmt->execute()) {
-					// 	echo "Ошибка при обновлении записи с ID $title_id";
-					// }
+			for ($i = 0; $i < $totalCount; $i++) {
+				if (isset($newtitles[$i]) && isset($oldtitles[$i]['title'])) {
+
+					if ($newtitles[$i] !== $oldtitles[$i]['title']) {
+						$title_id = $post[$i]['id'];
+						$stmt = $conn->prepare("UPDATE titles SET title = :title WHERE id = :title_id");
+						$stmt->bindParam(':title', $newtitles[$i], PDO::PARAM_STR);
+						$stmt->bindParam(':title_id', $title_id, PDO::PARAM_INT);
+						if (!$stmt->execute()) {
+							echo "Ошибка при обновлении записи с ID $title_id";
+						}
+					}
 				}
 			}
 		}
 	}
 
-	if (is_array($newtitles)) {
-
-		for ($i = 0; $i < count($newtitles); $i++) {
-
-			echo $remove[$i];
-			if (isset($newtitles[$i]) && $remove[$i] == 'on') {
-				$title_id = $post[$i]['id'];
-				// $stmt = $conn->prepare("DELETE FROM titles WHERE id=:title_id");
-				// $stmt->bindParam(':title_id', $title_id, PDO::PARAM_INT);
-				// $stmt->execute();
-			}
-
-		}
-	}
-
 	if (!empty($title)) {
-		$stmt = $conn->prepare("INSERT INTO titles(title) VALUE(:title)");
-		$stmt->bindParam(':title', $title);
-		$stmt->execute();
+		$titleNew = new CreateDeleteUpdate($stmt, $conn, $table = 'titles', $nameRow = 'title', $value = $title);
+		$titleNew->create();
 	}
-
-
-
-
 
 	header('refresh: 3, url=./../dashboard.php');
+	$conn = null;
 } else {
 	header('Location: dashboard.php?invalidRequest');
+	$conn = null;
 	exit();
 }
 
