@@ -32,3 +32,7 @@
 }
 
 ?>
+<!-- 
+<a href='./data/process.php?id=$id'>
+	Remove
+</a> -->

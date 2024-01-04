@@ -4,24 +4,24 @@ class CreateDeleteUpdate
 
 	public $stmt;
 	public $conn;
-
-	public $post;
-
 	public $id;
 	public $value;
 	public $nameRow;
-
 	public $table;
+	public $arrayRows;
 
-	public function __construct($stmt, $conn, $table, $nameRow, $value, $post = NULL, $id = NULL)
+	public function __construct($stmt, $conn, $table, $nameRow)
 	{
 		$this->conn = $conn;
 		$this->stmt = $stmt;
-		$this->post = $post;
-		$this->id = $id;
-		$this->value = $value;
 		$this->table = $table;
 		$this->nameRow = $nameRow;
+	}
+	public function setValues($id = null, $value = null, $array = null)
+	{
+		$this->id = $id;
+		$this->value = $value;
+		$this->arrayRows = $array;
 	}
 	public function create()
 	{
@@ -43,8 +43,26 @@ class CreateDeleteUpdate
 		$id = $this->id;
 
 		$this->stmt = $this->conn->prepare("DELETE FROM $table WHERE id = $bindRow");
-		$this->stmt->bindParam($bindRow, $id);
+		$this->stmt->bindParam($bindRow, $id, PDO::PARAM_INT);
 		$this->stmt->execute();
+	}
+	public function update()
+	{
+
+		$table = $this->table;
+		$nameRow = $this->nameRow;
+		$bindRow = ':' . $this->nameRow;
+		$id = $this->id;
+		$bindID = ':id';
+		$arrayRows = $this->arrayRows;
+
+		$this->stmt = $this->conn->prepare("UPDATE $table SET $nameRow = $bindRow WHERE id = $bindID");
+		$this->stmt->bindParam($bindRow, $arrayRows, PDO::PARAM_STR);
+		$this->stmt->bindParam($bindID, $id, PDO::PARAM_INT);
+
+		if (!$this->stmt->execute()) {
+			echo "Ошибка при обновлении записи с ID $id";
+		}
 	}
 }
 

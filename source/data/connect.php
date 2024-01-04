@@ -6,6 +6,8 @@ define("DB_CHARSET", "utf8");
 define("DB_USER", "root");
 define("DB_PASSWORD", "");
 
+$conn = null;
+
 try {
 
 	$dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
@@ -20,12 +22,13 @@ try {
 	if ($conn) {
 		echo 'successfull';
 	} else {
-		echo "\nPDO::errorInfo():\n";
 		print_r($conn->errorInfo());
 		$conn = null;
 	}
 } catch (PDOException $e) {
-	echo $conn->errorInfo();
+	if ($conn !== null) {
+		echo $e->getMessage();
+	}
 	$conn = null;
 }
 
