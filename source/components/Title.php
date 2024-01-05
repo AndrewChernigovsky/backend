@@ -1,4 +1,8 @@
-<?php class Title
+<?php
+
+require_once('Elements.php');
+
+class Title extends Elements
 {
 	public $title;
 	public $main;
@@ -15,7 +19,11 @@
 		$title = $this->title;
 		$id = $this->id;
 		if ($this->main) {
-			return "<h2>$title</h2>";
+			$path = './link' . (string) $id;
+			$this->setAttr('href', $path);
+			$this->setAttr('class', 'navigation__list-link base-text link');
+			$tag = $this->tag('a', $title);
+			return $tag;
 		} else {
 			return "
 				<input type='text' class='input-text' id='newtitle_$id' name='newtitles[]' value='$title'>

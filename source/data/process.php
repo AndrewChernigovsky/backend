@@ -45,11 +45,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$titleNew->setValues(null, $title, null);
 			$titleNew->create();
 		}
-
-		header('refresh: 3, url=./../dashboard.php');
+		header("Location: ./../dashboard.php");
+		// header('refresh: 3, url=./../dashboard.php');
 		$conn = null;
 	} else {
-		header('Location: dashboard.php?invalidRequest');
+		header('Location: 404.php');
 		$conn = null;
 		exit();
 	}
