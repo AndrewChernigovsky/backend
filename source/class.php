@@ -1,25 +1,58 @@
 <?php
-class User
-{
-	public $surname;
-	public $name;
-	public $full;
 
-	public function __get($property)
+
+class Component
+{
+
+	public $nameComponent;
+	public function __construct($nameComponent)
 	{
-		if ($property == 'fullname') {
-			return $this->surname . ' ' . $this->name . ' ' . $this->full;
-		}
+		$this->nameComponent = $nameComponent;
+	}
+	public function ComponentFun($name)
+	{
+		$this->nameComponent = $name;
+		return $this;
 	}
 }
-?>
 
-<?php
+class Tag extends Component
+{
 
-$test = new User;
-$test->surname = 'Alex';
-$test->name = 'Alexeevich';
-$test->full = 'Ivanovich';
+	public $name;
+	public $tagname;
 
-echo $test->fullname;
+	public $tagsname = ['a', 'span', 'p'];
+	public function __construct($nameComponent)
+	{
+		$this->name = $nameComponent;
+	}
+	public function component()
+	{
+		$name = $this->name;
+		$tagname = $this->getTagName();
+		$this->ComponentFun($name);
+	}
+
+	public function getTagName()
+	{
+
+	}
+
+	public function setTagName($tag)
+	{
+		if (is_array($tagsname)) {
+			foreach ($tagsname as $tagname) {
+				return $this->tagname = $tagname;
+			}
+		}
+		$this->tagname = $tag;
+	}
+}
+
+
+$menu = new Tag('menu');
+
+$menu->component();
+
 ?>
