@@ -1,58 +1,111 @@
 <?php
 
-
-class Component
+class Tag
 {
 
-	public $nameComponent;
-	public function __construct($nameComponent)
+	// Variables
+	private $tagOpen;
+	private $tagClose;
+	private $tag;
+	private $attrs = [];
+	private $value;
+	private $text;
+
+	private $attrName;
+
+	// Create Fucntions
+	public function createTag($name, $text)
 	{
-		$this->nameComponent = $nameComponent;
-	}
-	public function ComponentFun($name)
-	{
-		$this->nameComponent = $name;
+		$this->setTagNameOpen($name) . $this->setTagText($text) . $this->setTagNameClose($name);
+		$tag = $this->getTagNameOpen() . $this->getTagText() . $this->getTagNameClose();
+		echo $tag;
 		return $this;
 	}
-}
 
-class Tag extends Component
-{
-
-	public $name;
-	public $tagname;
-
-	public $tagsname = ['a', 'span', 'p'];
-	public function __construct($nameComponent)
+	// SETTERS 
+	public function setTagNameOpen($name)
 	{
-		$this->name = $nameComponent;
+		$attrsTag = $this->getAttrsTag($this->attrs);
+		$this->tagOpen = '<' . $name . ' ' . $attrsTag . '=' . $this->value . '>';
 	}
-	public function component()
+	public function setTagNameClose($name)
 	{
-		$name = $this->name;
-		$tagname = $this->getTagName();
-		$this->ComponentFun($name);
+		$this->tagClose = '</' . $name . '>';
 	}
 
-	public function getTagName()
+	public function setTagText($text)
 	{
-
+		$this->text = $text;
 	}
 
-	public function setTagName($tag)
+	// GETTERS 
+	private function getTagNameOpen()
 	{
-		if (is_array($tagsname)) {
-			foreach ($tagsname as $tagname) {
-				return $this->tagname = $tagname;
-			}
+		return $this->tagOpen;
+	}
+	private function getTagNameClose()
+	{
+		return $this->tagClose;
+	}
+
+	private function getTagText()
+	{
+		return $this->text;
+	}
+
+	public function setAttrTag($attrName, $value = true)
+	{
+		$this->attrs[$attrName] = $value;
+		return $this;
+	}
+	public function setAttrsTag($attrs)
+	{
+		foreach ($attrs as $attrName => $value) {
+
+			$this->setAttrTag($attrName, $value);
 		}
-		$this->tagname = $tag;
+		return $this;
+	}
+	public function getAttrs()
+	{
+		return $this->attrs;
+	}
+
+	private function getAttrsTag($attrs)
+	{
+		if (!empty($attrs)) {
+			$result = '';
+
+			foreach ($attrs as $name => $value) {
+				if ($value === true) {
+					$result .= " $name";
+				} else {
+					$result .= " $name=\"$value\"";
+				}
+			}
+
+			return $result;
+		} else {
+			return '';
+		}
 	}
 }
 
+class Attr extends Tag
+{
+	// public function createTagAttr($attrName, $value)
+	// {
+	// 	$this->setAttrTag($attrName, $value);
+	// 	$this->setAttrsTag($attrs);
+	// 	$this->getAttrsTag($attrs);
+	// 	return $this;
+	// }
 
-$menu = new Tag('menu');
 
-$menu->component();
+}
+
+$tag = new Tag;
+$attr = 'link';
+$tag->setAttrTag($attr, 'href')->setAttrTag($attr, 'href1')->createTag('span', 'Я не заголовок, но тоже существую');
 
 ?>
