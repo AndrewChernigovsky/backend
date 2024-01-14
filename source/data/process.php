@@ -3,6 +3,7 @@ require_once('connect.php');
 require_once('./../components/CreateDeleteUpdate.php');
 require_once('./../components/DataBase.php');
 $removeID = $_GET['id'];
+$remove_TABLE = $_GET['remove'];
 
 if (isset($removeID)) {
 	$titleRemove = new CreateDeleteUpdate($stmt, $conn, 'titles', 'title');
@@ -20,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$post = $selectAllbyID->selectAllbyID();
 		$oldtitles = $selectAll->selectAll();
 		$title = $_POST['title'];
+		$href = $_POST['href'];
 		$newtitles = $_POST['newtitles'];
 
 		if (empty($title)) {
@@ -40,12 +42,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			}
 		}
 
-		if (!empty($title)) {
+		if (!empty($title) && !empty($href)) {
 			$titleNew = new CreateDeleteUpdate($stmt, $conn, 'titles', 'title');
+			$titleNewHref = new CreateDeleteUpdate($stmt, $conn, 'titles', 'href');
 			$titleNew->setValues(null, $title, null);
 			$titleNew->create();
+			$titleNewHref->setValues(null, $href, null);
+			$titleNewHref->create();
 		}
-		header("Location: ./../dashboard.php");
+		// header("Location: ./../dashboard.php");
 		// header('refresh: 3, url=./../dashboard.php');
 		$conn = null;
 	} else {
@@ -54,6 +59,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		exit();
 	}
 }
-
+echo isset($remove_TABLE);
+if (isset($remove_TABLE)) {
+	$titleNew = new CreateDeleteUpdate($stmt, $conn, 'titles', 'title');
+	$titleNew->delete(true);
+	// header("Location: ./../dashboard.php");
+}
 
 ?>

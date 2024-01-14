@@ -40,7 +40,3 @@ class Title extends Elements
 }
 
 ?>
-<!-- 
-<a href='./data/process.php?id=$id'>
-	Remove
-</a> -->

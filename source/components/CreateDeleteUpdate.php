@@ -35,7 +35,7 @@ class CreateDeleteUpdate
 		$this->stmt->bindParam($bindRow, $value);
 		$this->stmt->execute();
 	}
-	public function delete()
+	public function delete($all = null)
 	{
 
 		$table = $this->table;
@@ -45,6 +45,11 @@ class CreateDeleteUpdate
 		$this->stmt = $this->conn->prepare("DELETE FROM $table WHERE id = $bindRow");
 		$this->stmt->bindParam($bindRow, $id, PDO::PARAM_INT);
 		$this->stmt->execute();
+
+		if ($all) {
+			$this->stmt = $this->conn->prepare("DROP TABLE  $table");
+			$this->stmt->execute();
+		}
 	}
 	public function update()
 	{
